@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DAGSample.Runtime;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,7 +14,7 @@ namespace DAGSample.Editor
 
         private Func<Vector2, Node> _nodeFactory;
 
-        private readonly List<SearchTreeEntry> _entries = new List<SearchTreeEntry>();
+        private readonly List<SearchTreeEntry> _entries = new List<SearchTreeEntry>(2);
 
         public void Initialize(GraphViewEditorWindow window, GraphView graphView, Func<Vector2, Node> nodeFactory)
         {
@@ -22,12 +23,12 @@ namespace DAGSample.Editor
             _nodeFactory = nodeFactory;
 
             _entries.Add(new SearchTreeGroupEntry(new GUIContent("Create Node")));
-            _entries.Add(new SearchTreeEntry(new GUIContent("Node"))
+            _entries.Add(new SearchTreeEntry(new GUIContent("DAG Node"))
             {
                 // Levelで階層を指定する
                 level = 1,
                 // 任意のObjectをここに設定できる。これを使って特定のSearchEntryが呼ばれた際に好きな処理ができるようにしている.
-                userData = typeof(Node),
+                userData = typeof(DAGSampleNode),
             });
         }
 
@@ -39,7 +40,7 @@ namespace DAGSample.Editor
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
             var type = searchTreeEntry.userData as Type;
-            if (type == null || type != typeof(Node))
+            if (type == null || type != typeof(DAGSampleNode))
             {
                 return false;
             }

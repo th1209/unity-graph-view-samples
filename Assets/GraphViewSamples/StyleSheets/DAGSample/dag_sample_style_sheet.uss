@@ -1,6 +1,11 @@
+/* cf) https://hirukotime.hatenablog.jp/entry/2022/11/11/201335 */
 GridBackground {
     --grid-background-color:rgb(90,90,90);
     --line-color:rgba(80,80,80,255);
     --thick-line-color:rgba(40,40,40,153);
     --spacing:10;
+}
+/* Nodeのタイトルは編集可にしているため、編集不可ラベルは非表示にする */
+#title-label {
+    display: none;
 }

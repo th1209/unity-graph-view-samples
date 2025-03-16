@@ -17,6 +17,7 @@ namespace DAGSample.Editor
                 if (window._graphData == null)
                 {
                     window.Initialize(graphData);
+                    window.ReloadGraphNodes();
                     return;
                 }
                 
@@ -36,9 +37,14 @@ namespace DAGSample.Editor
         private void Initialize(DAGSampleGraphData graphData)
         {
             _graphData = graphData;
-            // _presenter = new DAGSamplePresenter(_graphData);
             _graphView = new DAGSampleGraphView(this);
+            _presenter = new DAGSamplePresenter(_graphData, _graphView);
             rootVisualElement.Add(_graphView);
+        }
+
+        private void ReloadGraphNodes()
+        {
+            _presenter?.DesirializeGraphData(_graphData);
         }
 
         private void OnDisable()
@@ -48,15 +54,15 @@ namespace DAGSample.Editor
 
         private void DestroyGraph()
         {
+            _presenter?.Dispose();
+            _presenter = null;
+
             if (_graphView != null)
             {
                 rootVisualElement.Remove(_graphView);
                 _graphView.Dispose();
                 _graphView = null;
             }
-
-            _presenter?.Dispose();
-            _presenter = null;
 
             _graphData = null;
         }

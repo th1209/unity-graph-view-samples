@@ -126,7 +126,7 @@ namespace DAGSample.Runtime
             return false;
         }
         
-        private bool TryGetNode(string nodeGuid, out DAGSampleNodeData node)
+        public bool TryGetNode(string nodeGuid, out DAGSampleNodeData node)
         {
             node = null;
             for (int i = 0; i < nodes.Count; i++)

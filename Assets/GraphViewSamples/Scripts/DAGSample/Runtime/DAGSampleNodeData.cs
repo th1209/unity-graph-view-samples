@@ -10,9 +10,9 @@ namespace DAGSample.Runtime
         [SerializeField] private string guid;
         [SerializeField] private Rect rect;
 
-        public string Name => name;
+        public string Name { get => name; set => name = value; }
         public string Guid => guid;
-        public Rect Rect => rect;
+        public Rect Rect  { get => rect; set => rect = value; }
 
         public DAGSampleNodeData(string name, Rect rect)
         {

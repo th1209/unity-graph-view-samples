@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -43,8 +42,6 @@ namespace DAGSample.Editor
             _searchWindowProvider.Initialize(window, this, OnNodeCrate);
 
             RegisterCallbacks();
-            
-            // TODO: GraphDataのロード処理
         }
 
         // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Experimental.GraphView.GraphView.GetCompatiblePorts.html
