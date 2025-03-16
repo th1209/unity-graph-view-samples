@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/.idea.unity-graph-view-samples.iml
+/projectSettingsUpdater.xml
+/modules.xml
