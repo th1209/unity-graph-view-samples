@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 namespace DAGSample.Runtime
 {
     [CreateAssetMenu(fileName = "graph_data", menuName = "ScriptableObjects/DAG Sample GraphData", order = 1)]
-    public class DAGSampleGraphData
+    public class DAGSampleGraphData : ScriptableObject
     {
         [SerializeField] private List<DAGSampleNodeData> nodes;
         [SerializeField] private List<DAGSampleEdgeData> edges;

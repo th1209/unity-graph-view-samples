@@ -1,16 +1,11 @@
-using UnityEngine;
+using System;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+namespace DAGSample.Editor
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class DAGSamplePresenter : IDisposable
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void Dispose()
+        {
+        }
     }
 }
