@@ -37,6 +37,7 @@ namespace DAGSample.Editor
             _toolbar.AlignButtonClickedEvent += AlignNodes;
             
             Undo.undoRedoPerformed += ReloadGraphViewNodes;
+            Undo.postprocessModifications += OnPostprocessModifications;
         }
 
         private Node OnCreateNode(Vector2 mousePosition)
@@ -193,11 +194,24 @@ namespace DAGSample.Editor
         {
             UnityEngine.Debug.Log("Nodeの整列処理を実装");
         }
+        
+        private UndoPropertyModification[] OnPostprocessModifications(UndoPropertyModification[] modifications)
+        {
+            foreach (var mod in modifications)
+            {
+                if (mod.currentValue.target is DAGSampleGraphData graphData && graphData == _graphData)
+                {
+                    ReloadGraphViewNodes();
+                }
+            }
+            return modifications;
+        }
 
         public void Dispose()
         {
+            Undo.postprocessModifications -= OnPostprocessModifications;
             Undo.undoRedoPerformed -= ReloadGraphViewNodes;
-            
+
             if (_toolbar != null)
             {
                 _toolbar.AlignButtonClickedEvent -= AlignNodes;
