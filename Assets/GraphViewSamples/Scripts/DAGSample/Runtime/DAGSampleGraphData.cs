@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -66,7 +67,7 @@ namespace DAGSample.Runtime
             {
                 throw new InvalidOperationException();
             }
-            
+            Undo.RecordObject(this, $"{name} Add Node");
             nodes.Add(node);
         }
         
@@ -77,6 +78,7 @@ namespace DAGSample.Runtime
             {
                 return false;
             }
+            Undo.RecordObject(this, $"{name} Remove Node");
             return nodes.Remove(node);
         }
         
@@ -101,7 +103,8 @@ namespace DAGSample.Runtime
             {
                 throw new InvalidOperationException();
             }
-            
+
+            Undo.RecordObject(this, $"{name} Add Edge");
             edges.Add(new DAGSampleEdgeData(fromGuid, toGuid));
         }
         
@@ -120,7 +123,8 @@ namespace DAGSample.Runtime
 
             if (TryGetEdge(fromGuid, toGuid, out var edge))
             {
-                return edges.Remove(edge); 
+                Undo.RecordObject(this, $"{name} Remove Edge");
+                return edges.Remove(edge);
             }
 
             return false;
