@@ -39,6 +39,8 @@ namespace DAGSample.Editor
             _graphView.MoveElementsEvent += OnMoveElements;
 
             _toolbar.AlignButtonClickedEvent += AlignNodes;
+            _toolbar.IsAcyclicButtonClickedEvent += _graphData.IsAcyclic;
+            _toolbar.IsConnectedButtonClickedEvent += _graphData.IsConnected;
             
             Undo.undoRedoPerformed += ReloadGraphViewNodes;
             Undo.postprocessModifications += OnPostprocessModifications;
@@ -228,6 +230,11 @@ namespace DAGSample.Editor
 
             if (_toolbar != null)
             {
+                if (_graphData != null)
+                {
+                    _toolbar.IsConnectedButtonClickedEvent -= _graphData.IsConnected;
+                    _toolbar.IsAcyclicButtonClickedEvent -= _graphData.IsAcyclic;
+                }
                 _toolbar.AlignButtonClickedEvent -= AlignNodes;
                 _toolbar = null;
             }
