@@ -1,6 +1,7 @@
 using DAGSample.Runtime;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace DAGSample.Editor
@@ -9,6 +10,7 @@ namespace DAGSample.Editor
     {
         private DAGSampleGraphData _graphData;
         private DAGSampleGraphView _graphView;
+        private DAGSampleToolbar _toolbar;
         private DAGSamplePresenter _presenter;
         
         public static void Open(DAGSampleGraphData graphData)
@@ -38,13 +40,15 @@ namespace DAGSample.Editor
         {
             _graphData = graphData;
             _graphView = new DAGSampleGraphView(this);
-            _presenter = new DAGSamplePresenter(_graphData, _graphView);
             rootVisualElement.Add(_graphView);
+            _toolbar = new DAGSampleToolbar();
+            rootVisualElement.Add(_toolbar);
+            _presenter = new DAGSamplePresenter(_graphData, _graphView, _toolbar);
         }
 
         private void ReloadGraphNodes()
         {
-            _presenter?.DesirializeGraphData(_graphData);
+            _presenter?.DeserializeGraphData(_graphData);
         }
 
         private void OnDisable()
@@ -56,6 +60,13 @@ namespace DAGSample.Editor
         {
             _presenter?.Dispose();
             _presenter = null;
+
+            if (_toolbar != null)
+            {
+                rootVisualElement.Remove(_toolbar);
+                _toolbar.Dispose();
+                _toolbar = null;
+            }
 
             if (_graphView != null)
             {

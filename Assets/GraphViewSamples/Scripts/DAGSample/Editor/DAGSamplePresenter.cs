@@ -16,22 +16,26 @@ namespace DAGSample.Editor
         private DAGSampleGraphData _graphData;
         // View
         private DAGSampleGraphView _graphView;
+        private DAGSampleToolbar _toolbar;
 
         private HashSet<Node> _nodes = new HashSet<Node>(16);
         private HashSet<Edge> _edges = new HashSet<Edge>(16);
 
         private Dictionary<string, DAGSampleNode> _tempIdToNode = new Dictionary<string, DAGSampleNode>(16);
 
-        public DAGSamplePresenter(DAGSampleGraphData graphData, DAGSampleGraphView graphView)
+        public DAGSamplePresenter(DAGSampleGraphData graphData, DAGSampleGraphView graphView, DAGSampleToolbar toolbar)
         {
             _graphData = graphData;
             _graphView = graphView;
+            _toolbar = toolbar;
  
             _graphView.CreateNodeEvent += OnCreateNode;
             _graphView.CreateEdgesEvent += OnCreateEdges;
             _graphView.RemoveElementsEvent += OnRemoveElements;
             _graphView.MoveElementsEvent += OnMoveElements;
 
+            _toolbar.AlignButtonClickedEvent += AlignNodes;
+            
             Undo.undoRedoPerformed += ReloadGraphViewNodes;
         }
 
@@ -185,9 +189,20 @@ namespace DAGSample.Editor
             DeserializeGraphData(_graphData);
         }
 
+        private void AlignNodes()
+        {
+            UnityEngine.Debug.Log("Nodeの整列処理を実装");
+        }
+
         public void Dispose()
         {
             Undo.undoRedoPerformed -= ReloadGraphViewNodes;
+            
+            if (_toolbar != null)
+            {
+                _toolbar.AlignButtonClickedEvent -= AlignNodes;
+                _toolbar = null;
+            }
 
             if (_graphView!= null)
             {
