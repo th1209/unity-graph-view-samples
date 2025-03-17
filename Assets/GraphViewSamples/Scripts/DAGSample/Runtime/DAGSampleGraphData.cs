@@ -15,12 +15,19 @@ namespace DAGSample.Runtime
         public IReadOnlyCollection<DAGSampleNodeData> Nodes => nodes;
         public IReadOnlyCollection<DAGSampleEdgeData> Edges => edges;
 
-        private List<string> _tempVisited = new List<string>(16);
-        private Dictionary<string, bool> _tempStack = new Dictionary<string, bool>(16);
-        private readonly Queue<DAGSampleNodeData> _tempQueue = new Queue<DAGSampleNodeData>(16); 
-        private readonly Dictionary<DAGSampleNodeData, int> _tempInDegree = new Dictionary<DAGSampleNodeData, int>(16);
+        private List<string> _tempVisited;
+        private List<string> TempVisited => _tempVisited ??= new List<string>(nodes.Count);
 
-        public DAGSampleGraphData(List<DAGSampleNodeData> nodes, List<DAGSampleEdgeData> edges)
+        private Dictionary<string, bool> _tempStack;
+        private Dictionary<string, bool> TempStack => _tempStack ??= new Dictionary<string, bool>(nodes.Count);
+
+        private Queue<DAGSampleNodeData> _tempQueue; 
+        private Queue<DAGSampleNodeData> TempQueue => _tempQueue ??= new Queue<DAGSampleNodeData>(nodes.Count);
+
+        private Dictionary<DAGSampleNodeData, int> _tempInDegree;
+        private Dictionary<DAGSampleNodeData, int> TempInDegree => _tempInDegree ??= new Dictionary<DAGSampleNodeData, int>(nodes.Count);
+
+        public DAGSampleGraphData(List<DAGSampleNodeData> nodes, List<DAGSampleEdgeData> edges) 
         {
             this.nodes = new List<DAGSampleNodeData>(nodes);
             this.edges = new List<DAGSampleEdgeData>(edges);
@@ -163,12 +170,12 @@ namespace DAGSample.Runtime
         // 非循環グラフ条件を満たしているか
         public bool IsAcyclic()
         {
-            _tempVisited.Clear();
-            _tempStack.Clear();
+            TempVisited.Clear();
+            TempStack.Clear();
 
             foreach (var node in nodes)
             {
-                if (!_tempVisited.Contains(node.Guid) && DetectCycle(node, ref _tempVisited, ref _tempStack))
+                if (!TempVisited.Contains(node.Guid) && DetectCycle(node, TempVisited, TempStack))
                 {
                     return false;
                 }
@@ -176,7 +183,7 @@ namespace DAGSample.Runtime
             return true;
         }
         
-        private bool DetectCycle(DAGSampleNodeData node, ref List<string> visited, ref Dictionary<string, bool> stack)
+        private bool DetectCycle(DAGSampleNodeData node, List<string> visited, Dictionary<string, bool> stack)
         {
             // ※次Nodeの走査中に同じNodeが現れた場合は循環しているのでNG
             if (stack.ContainsKey(node.Guid) && stack[node.Guid])
@@ -194,7 +201,7 @@ namespace DAGSample.Runtime
     
             foreach (var nextNode in GetNextNodes(node.Guid))
             {
-                if (DetectCycle(nextNode, ref visited, ref stack))
+                if (DetectCycle(nextNode, visited, stack))
                 {
                     return true;
                 }
@@ -212,33 +219,33 @@ namespace DAGSample.Runtime
                 return true;
             }
             
-            _tempVisited.Clear();
-            _tempQueue.Clear();
+            TempVisited.Clear();
+            TempQueue.Clear();
 
-            _tempQueue.Enqueue(nodes[0]);
+            TempQueue.Enqueue(nodes[0]);
 
-            while (_tempQueue.Count > 0)
+            while (TempQueue.Count > 0)
             {
-                var node = _tempQueue.Dequeue();
-                if (_tempVisited.Contains(node.Guid))
+                var node = TempQueue.Dequeue();
+                if (TempVisited.Contains(node.Guid))
                 {
                     continue;
                 }
-                _tempVisited.Add(node.Guid);
+                TempVisited.Add(node.Guid);
 
                 foreach (var nextNode in GetNextNodes(node.Guid))
                 {
-                        _tempQueue.Enqueue(nextNode);
+                        TempQueue.Enqueue(nextNode);
                 }
 
                 // ※先頭Nodeが必ずしも入次数0のNodeとは限らないため、逆方向からの走査も必要
                 foreach (var prevNode in GetPreviousNodes(node.Guid))
                 {
-                    _tempQueue.Enqueue(prevNode);
+                    TempQueue.Enqueue(prevNode);
                 }
             }
 
-            return _tempVisited.Count == nodes.Count;
+            return TempVisited.Count == nodes.Count;
         }
         
         // トポロジカルソートされた状態のノード群を返す
@@ -249,34 +256,34 @@ namespace DAGSample.Runtime
                 throw new InvalidOperationException();
             }
 
-            _tempInDegree.Clear();
-            _tempQueue.Clear();
+            TempInDegree.Clear();
+            TempQueue.Clear();
             var sortedNodes = new List<DAGSampleNodeData>(nodes.Count);
 
             // 各ノードの入次数を調べ、先頭ノード群から開始する
             foreach (var node in nodes)
             {
                 int prevCount = GetPreviousNodes(node.Guid).Count;
-                _tempInDegree[node] = prevCount;
+                TempInDegree[node] = prevCount;
                 if (prevCount == 0)
                 {
-                    _tempQueue.Enqueue(node);
+                    TempQueue.Enqueue(node);
                 }
             }
 
-            while(_tempQueue.Count > 0)
+            while(TempQueue.Count > 0)
             {
                 // 入次数の少ないものからキューに積まれる
-                var node = _tempQueue.Dequeue();
+                var node = TempQueue.Dequeue();
                 sortedNodes.Add(node);
 
                 // 次Nodeを調べ、入次数が0になるなら次回の処理対象に
                 foreach (var nextNode in GetNextNodes(node.Guid))
                 {
-                    _tempInDegree[nextNode]--;
-                    if (_tempInDegree[nextNode] == 0)
+                    TempInDegree[nextNode]--;
+                    if (TempInDegree[nextNode] == 0)
                     {
-                        _tempQueue.Enqueue(nextNode);
+                        TempQueue.Enqueue(nextNode);
                     }
                 }
             }

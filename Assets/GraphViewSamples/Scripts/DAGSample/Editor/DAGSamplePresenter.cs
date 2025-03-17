@@ -17,8 +17,10 @@ namespace DAGSample.Editor
         // View
         private DAGSampleGraphView _graphView;
         private DAGSampleToolbar _toolbar;
+        
+        private DAGSampleGraphAligner _graphAligner;
 
-        private HashSet<Node> _nodes = new HashSet<Node>(16);
+        private HashSet<DAGSampleNode> _nodes = new HashSet<DAGSampleNode>(16);
         private HashSet<Edge> _edges = new HashSet<Edge>(16);
 
         private Dictionary<string, DAGSampleNode> _tempIdToNode = new Dictionary<string, DAGSampleNode>(16);
@@ -28,6 +30,8 @@ namespace DAGSample.Editor
             _graphData = graphData;
             _graphView = graphView;
             _toolbar = toolbar;
+
+            _graphAligner = new DAGSampleGraphAligner(new Vector2(150, 150));
  
             _graphView.CreateNodeEvent += OnCreateNode;
             _graphView.CreateEdgesEvent += OnCreateEdges;
@@ -192,7 +196,17 @@ namespace DAGSample.Editor
 
         private void AlignNodes()
         {
-            UnityEngine.Debug.Log("Nodeの整列処理を実装");
+            _graphAligner.Align(_graphData, (nodeData) =>
+            {
+                foreach (var node in _nodes)
+                {
+                    if (node.Guid == nodeData.Guid)
+                    {
+                        node.SetPosition(nodeData.Rect);
+                    }
+                }
+            });
+            SaveGraphData();
         }
         
         private UndoPropertyModification[] OnPostprocessModifications(UndoPropertyModification[] modifications)

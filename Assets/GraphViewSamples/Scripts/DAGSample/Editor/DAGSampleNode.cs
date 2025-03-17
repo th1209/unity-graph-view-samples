@@ -49,15 +49,13 @@ namespace DAGSample.Editor
             outputContainer.Add(_outputPort);
 
             var primitiveFieldFoldout = new Foldout { text = "Additional Fields", value = true };
-            primitiveFieldFoldout.value = false;
+            primitiveFieldFoldout.value = false; // 初期状態は閉じた状態に
             extensionContainer.Add(primitiveFieldFoldout);
             var guidField = new TextField("GUID");
             guidField.value = _guid;
             guidField.SetEnabled(false); // 入力不可
             primitiveFieldFoldout.Add(guidField);
-            // extensionContainer.Add(guidField); // extensionContainerは初期状態ではToggle off状態になる
 
-            // expanded = false;
             RefreshExpandedState();
         }
     }
