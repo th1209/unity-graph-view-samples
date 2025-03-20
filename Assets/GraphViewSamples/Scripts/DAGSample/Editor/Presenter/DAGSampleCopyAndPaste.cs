@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using DAGSample.Editor.View;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.Presenter
 {
     public class DAGSampleCopyAndPaste : IDisposable
     {

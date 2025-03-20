@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DAGSample.Runtime;
 using UnityEngine;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.Presenter
 {
     public class DAGSampleGraphAligner
     {

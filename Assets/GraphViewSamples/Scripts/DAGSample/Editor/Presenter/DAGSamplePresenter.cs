@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using DAGSample.Editor.View;
 using DAGSample.Runtime;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.Presenter
 {
     public class DAGSamplePresenter : IDisposable
     {

@@ -1,10 +1,9 @@
+using DAGSample.Editor.Presenter;
 using DAGSample.Runtime;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
-using UnityEngine;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.View
 {
     public class DAGSampleGraphWindow : GraphViewEditorWindow
     {

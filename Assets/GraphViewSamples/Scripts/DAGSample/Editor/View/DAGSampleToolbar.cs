@@ -4,7 +4,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.View
 {
     public class DAGSampleToolbar : Toolbar, IDisposable
     {

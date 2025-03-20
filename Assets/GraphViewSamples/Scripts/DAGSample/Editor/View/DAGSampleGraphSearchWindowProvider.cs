@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using DAGSample.Runtime;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.View
 {
     public class DAGSampleGraphSearchWindowProvider : ScriptableObject, ISearchWindowProvider
     {

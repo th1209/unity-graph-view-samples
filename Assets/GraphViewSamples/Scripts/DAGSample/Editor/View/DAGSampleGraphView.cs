@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Edge = UnityEditor.Experimental.GraphView.Edge;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.View
 {
     public class DAGSampleGraphView : GraphView, IDisposable
     {

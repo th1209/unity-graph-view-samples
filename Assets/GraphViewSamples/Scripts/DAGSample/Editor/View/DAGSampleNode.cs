@@ -2,7 +2,7 @@ using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
-namespace DAGSample.Editor
+namespace DAGSample.Editor.View
 {
     public class DAGSampleNode : Node
     {
