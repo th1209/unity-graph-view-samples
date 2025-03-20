@@ -19,6 +19,7 @@ namespace DAGSample.Editor
         private DAGSampleToolbar _toolbar;
         
         private DAGSampleGraphAligner _graphAligner;
+        private DAGSampleCopyAndPaste _copyAndPaste;
 
         private HashSet<DAGSampleNode> _nodes = new HashSet<DAGSampleNode>(16);
         private HashSet<Edge> _edges = new HashSet<Edge>(16);
@@ -38,6 +39,11 @@ namespace DAGSample.Editor
             _graphView.RemoveElementsEvent += OnRemoveElements;
             _graphView.MoveElementsEvent += OnMoveElements;
 
+            _copyAndPaste = new DAGSampleCopyAndPaste(CreateNode, SaveGraphData);
+            _graphView.SerializeGraphElementsEvent += _copyAndPaste.OnSerializeGraphElements;
+            _graphView.CanPasteSerializedDataEvent += _copyAndPaste.OnCanPasteSerializedData;
+            _graphView.UnserializeAndPasteEvent += _copyAndPaste.OnUnserializeAndPaste;
+
             _toolbar.AlignButtonClickedEvent += AlignNodes;
             _toolbar.IsAcyclicButtonClickedEvent += _graphData.IsAcyclic;
             _toolbar.IsConnectedButtonClickedEvent += _graphData.IsConnected;
@@ -48,16 +54,8 @@ namespace DAGSample.Editor
 
         private Node OnCreateNode(Vector2 mousePosition)
         {
-            var rect = new Rect(mousePosition, s_nodeSize);
-            var nodeData = new DAGSampleNodeData(NodeTitle, rect);
-            _graphData.Add(nodeData);
+            var node =CreateNode(NodeTitle, new Rect(mousePosition, s_nodeSize));
             SaveGraphData();
-
-            var node = new DAGSampleNode(NodeTitle, nodeData.Guid, OnUpdateNode);
-            node.Initialize();
-            node.SetPosition(rect);
-            _nodes.Add(node);
-
             return node;
         }
         
@@ -210,7 +208,20 @@ namespace DAGSample.Editor
             });
             SaveGraphData();
         }
-        
+
+        private Node CreateNode(string nodeTitle, Rect rect)
+        {
+            var nodeData = new DAGSampleNodeData(nodeTitle, rect);
+            _graphData.Add(nodeData);
+
+            var node = new DAGSampleNode(nodeTitle, nodeData.Guid, OnUpdateNode);
+            node.Initialize();
+            node.SetPosition(rect);
+            _nodes.Add(node);
+
+            return node;
+        }
+
         private UndoPropertyModification[] OnPostprocessModifications(UndoPropertyModification[] modifications)
         {
             foreach (var mod in modifications)
@@ -228,6 +239,19 @@ namespace DAGSample.Editor
             Undo.postprocessModifications -= OnPostprocessModifications;
             Undo.undoRedoPerformed -= ReloadGraphViewNodes;
 
+            if (_copyAndPaste != null)
+            {
+                if (_graphView != null)
+                {
+                    _graphView.UnserializeAndPasteEvent -= _copyAndPaste.OnUnserializeAndPaste;
+                    _graphView.CanPasteSerializedDataEvent -= _copyAndPaste.OnCanPasteSerializedData;
+                    _graphView.SerializeGraphElementsEvent -= _copyAndPaste.OnSerializeGraphElements;
+                }
+
+                _copyAndPaste.Dispose();
+                _copyAndPaste = null;
+            }
+            
             if (_toolbar != null)
             {
                 if (_graphData != null)
@@ -245,6 +269,7 @@ namespace DAGSample.Editor
                 _graphView.RemoveElementsEvent -= OnRemoveElements;
                 _graphView.CreateEdgesEvent -= OnCreateEdges;
                 _graphView.CreateNodeEvent -= OnCreateNode;
+
                 _graphView = null;
             }
 
