@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MiniSample.BasicGraphView.Editor
@@ -22,6 +25,8 @@ namespace MiniSample.BasicGraphView.Editor
             this.AddManipulator(new RectangleSelector());
             // 描画範囲自体を移動可能にする
             this.AddManipulator(new ContentDragger());
+            // コンテキストメニュー呼び出し時の挙動をカスタマイズする
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
 
             // 背景を設定
             var backGround = new GridBackground();
@@ -31,6 +36,41 @@ namespace MiniSample.BasicGraphView.Editor
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(StyleSheetPath);
             Assert.IsNotNull(styleSheet);
             styleSheets.Add(styleSheet);
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            // ノード作成メニューを作り、押された時にNodeを生成する
+            var pos = viewTransform.matrix.inverse.MultiplyPoint(evt.localMousePosition);
+            evt.menu.AppendAction("Create Node", action => CreateNode("Node", pos));
+            
+            // デフォルトのメニューを表示したい場合は以下をコメントインしてください
+            base.BuildContextualMenu(evt);
+        }
+
+        // Port間が接続可能かどうかは、GraphViewのGetCompatiblePortsをオーバーライドして判定する
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            // 接続開始Portが引数で渡ってくる。
+            // GraphView上のPort群のうち、接続可能なPort群を返すように実装すればOK。
+            var compatiblePorts = new List<Port>(ports.Count());
+            foreach (var port in ports)
+            {
+                if (startPort.node == port.node || startPort.direction == port.direction || startPort.portType != port.portType)
+                {
+                    continue;
+                }
+                compatiblePorts.Add(port);
+            }
+            return compatiblePorts;
+        }
+
+        private Node CreateNode(string title, Vector2 position)
+        {
+            var node = new CustomNode(title);
+            node.SetPosition(new Rect(position, new Vector2(150, 100)));
+            AddElement(node);
+            return node;
         }
     }
 }
