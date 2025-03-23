@@ -1,0 +1,59 @@
+.node #title-label
+{
+    color: #333333;
+}
+
+.node .field-label
+{
+    color: #bbbbbb;
+}
+
+.int-field-node #title
+{
+    background-color: #ffb3b3;
+}
+
+.float-field-node #title
+{
+    background-color: #ffb3b3;
+}
+
+.enum-field-node #title
+{
+    background-color: #ffd9b3;
+}
+
+.vector3-field-node #title
+{
+    background-color: #ffffb3;
+}
+
+.text-field-node #title
+{
+    background-color: #b3ffb3;
+}
+
+.color-field-node #title
+{
+    background-color: #b3d9ff;
+}
+
+.gradient-field-node #title
+{
+    background-color: #b3d9ff;
+}
+
+.curve-field-node #title
+{
+    background-color: #d1b3ff;
+}
+
+.object-field-node #title
+{
+    background-color: #e6b3ff;
+}
+
+.unity-label
+{
+    color: #333333;
+}
