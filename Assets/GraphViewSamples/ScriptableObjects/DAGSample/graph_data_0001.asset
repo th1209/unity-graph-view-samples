@@ -12,5 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d9553e87d6742849fcc01c5e265c1e, type: 3}
   m_Name: graph_data_0001
   m_EditorClassIdentifier: 
-  nodes: []
-  edges: []
+  nodes:
+  - name: Node1
+    guid: ee9d4e77-d4de-4b39-a227-0d3349d07340
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 118
+      height: 96.5
+  - name: Node2
+    guid: 307a6aac-e53f-4a40-9432-7f74866b8722
+    rect:
+      serializedVersion: 2
+      x: 150
+      y: 0
+      width: 118
+      height: 96.5
+  - name: Node3
+    guid: c24910bb-0d1a-4e1d-99f5-32a3e993e9ae
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 150
+      width: 118
+      height: 96.5
+  - name: Node4
+    guid: 59734bd0-4543-4443-b5af-a3e40c53cd61
+    rect:
+      serializedVersion: 2
+      x: 300
+      y: 0
+      width: 118
+      height: 96.5
+  - name: Node5
+    guid: 9f51a8b7-0b4e-46ad-9cdb-de5ec7a5e869
+    rect:
+      serializedVersion: 2
+      x: 150
+      y: 150
+      width: 118
+      height: 96.5
+  edges:
+  - from: ee9d4e77-d4de-4b39-a227-0d3349d07340
+    to: 307a6aac-e53f-4a40-9432-7f74866b8722
+  - from: 307a6aac-e53f-4a40-9432-7f74866b8722
+    to: 59734bd0-4543-4443-b5af-a3e40c53cd61
+  - from: c24910bb-0d1a-4e1d-99f5-32a3e993e9ae
+    to: 9f51a8b7-0b4e-46ad-9cdb-de5ec7a5e869
