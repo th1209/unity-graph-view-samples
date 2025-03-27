@@ -32,6 +32,7 @@ namespace DAGSample.Editor.View
                 // 既にWindowが開いており、ScriptableObjectで開き直す場合
                 window.DestroyGraph();
                 window.Initialize(graphData);
+                window.ReloadGraphNodes();
                 window.Focus();
         }
         
