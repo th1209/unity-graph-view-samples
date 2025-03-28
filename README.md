@@ -70,7 +70,7 @@ GraphView上で、カスタムSearchWindowを表示するためのサンプル�
 Group機能(Nodeをグルーピングしてまとめる機能)とMiniMap表示機能までのサンプルです。
 
 <p align="center">
-    <img width="80%" src="Documentation/Images/mini_sample_group_and_mini_map_01.gif">
+    <img width="80%" src="Documentation/Images/mini_sample_group_and_minimap_01.gif">
 </p>
 
 
